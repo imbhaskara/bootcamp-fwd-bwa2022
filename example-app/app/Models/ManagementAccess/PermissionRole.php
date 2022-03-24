@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Models\MasterData;
+namespace App\Models\ManagementAccess;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\softDeletes;
 
-class TypeUser extends Model
+class PermissionRole extends Model
 {
     //use HasFactory;
     use softDeletes;
     
     //Declare table
-    public $table ='type_user';
+    public $table ='permission_role';
 
     protected $dates = [
         'created_at',
@@ -21,7 +21,8 @@ class TypeUser extends Model
     ];
 
     protected $fillable = [
-        'name',
+        'permission_id',
+        'role_id',
         'created_at',
         'updated_at',
         'deleted_at',

@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Models\MasterData;
+namespace App\Models\ManagementAccess;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\softDeletes;
 
-class TypeUser extends Model
+class DetailUser extends Model
 {
     //use HasFactory;
     use softDeletes;
     
     //Declare table
-    public $table ='type_user';
+    public $table ='detail_user';
 
     protected $dates = [
         'created_at',
@@ -21,9 +21,15 @@ class TypeUser extends Model
     ];
 
     protected $fillable = [
-        'name',
+        'user_id',
+        'type_user_id',
+        'contact',
+        'address',
+        'photo',
+        'gender',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
+    
 }
