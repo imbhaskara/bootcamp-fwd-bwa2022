@@ -26,4 +26,10 @@ class Consultation extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function appointment()
+        {
+            //relationship hasMany(path model, foreign key destination table)
+            return $this->hasMany('App\Models\Operational\Appointment', 'consultation_id');
+        }
 }

@@ -32,4 +32,29 @@ class Appointment extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    //Relationship table doctor - table appointment = One to Many
+    public function doctor()
+        {
+            return $this->belongsTo('App\Models\Operational\Doctor','doctor_id', 'id');
+        }
+    
+    //Relationship table consultation(Ngirim) - table appointment(Nerima) = One to Many
+    public function consultation()
+        {
+            return $this->belongsTo('App\Models\MasterData\Consultation','consultation_id', 'id');
+        }
+
+    //Relationship table user(Ngirim) - table appointment(Nerima) = One to Many
+    public function user()
+        {
+            return $this->belongsTo('App\Models\User','user_id', 'id');
+        }
+    
+    //Relationship table appointment(Ngirim) - table transaction(Nerima) = One to One
+    public function transaction()
+        {
+            //relationship hasOne(path model, foreign key destination table)
+            return $this->hasOne('App\Models\Operational\Doctor', 'appointment_id');
+        }
 }
