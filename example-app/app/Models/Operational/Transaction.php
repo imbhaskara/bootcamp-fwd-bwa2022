@@ -34,7 +34,7 @@ class Transaction extends Model
      ];
 
      public function appointment()
-        {
-            return $this->belongsTo('App\Models\Operational\Appointment','appointment_id', 'id');
-        }
+    {
+        return $this->belongsTo('App\Models\Operational\Appointment','appointment_id', 'id');
+    }
 }

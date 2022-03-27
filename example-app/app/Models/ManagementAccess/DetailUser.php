@@ -40,7 +40,7 @@ class DetailUser extends Model
 
     //Relationship table user(Ngirim) - table detailUser(Nerima) = One to One
     public function user()
-        {
-            return $this->belongsTo('App\Models\User','user_id', 'id');
-        }
+    {
+        return $this->belongsTo('App\Models\User','user_id', 'id');
+    }
 }

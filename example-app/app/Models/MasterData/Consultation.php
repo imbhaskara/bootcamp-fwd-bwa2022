@@ -28,8 +28,8 @@ class Consultation extends Model
     ];
 
     public function appointment()
-        {
-            //relationship hasMany(path model, foreign key destination table)
-            return $this->hasMany('App\Models\Operational\Appointment', 'consultation_id');
-        }
+    {
+        //relationship hasMany(path model, foreign key destination table)
+        return $this->hasMany('App\Models\Operational\Appointment', 'consultation_id');
+    }
 }
