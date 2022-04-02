@@ -21,11 +21,6 @@ use App\Models\MasterData\Specialist;
 
 class LandingController extends Controller
 {
-    //Construct digunakan untuk mengamankan aplikasi kita dari edit-edit yang tidak diharapkan
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Display a listing of the resource.
      *
