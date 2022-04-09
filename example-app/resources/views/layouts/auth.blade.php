@@ -4,7 +4,7 @@
         @include('includes.auth.meta')
          
         {{-- yield digunakan untuk menggabungkan / menerima blade lain dari file lain --}}
-        <title>Sign In | MeetDoctors</title>
+        <title>@yield('title') | MeetDoctors</title>
 
         {{-- Stack digunakan untuk menampilkan plugin-plugin yang kita pake untuk page tertentu --}}
         @stack('before-style')
@@ -12,9 +12,7 @@
         @stack('after-style')
     </head>
     <body>
-        @include('components.frontsite.header')
-            Home
-        @include('components.frontsite.footer')
+        @yield('content')
 
         @stack('before-script')
             @include('includes.frontsite.script')
