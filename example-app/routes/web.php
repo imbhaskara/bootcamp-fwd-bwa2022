@@ -9,6 +9,12 @@ use App\Http\Controllers\Frontsite\PaymentController;
 
 //Input your backsite controller here
 use App\Http\Controllers\Backsite\DashboardController;
+use App\Http\Controllers\Backsite\PermissionController;
+use App\Http\Controllers\Backsite\RoleController;
+use App\Http\Controllers\Backsite\UserController;
+use App\Http\Controllers\Backsite\AppointmentBacksiteController;
+use App\Http\Controllers\Backsite\TypeUserController;
+use App\Http\Controllers\Backsite\DoctorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +41,24 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
 
     // Dashboard Page di backsite
     Route::resource('dashboard', DashboardController::class);
+
+    // Permission Page di backsite
+    Route::resource('permission', PermissionController::class);
+
+    // Role Page di Backsite
+    Route::resource('role', RoleController::class);
+
+    // User Page di Backsite
+    Route::resource('user', UserController::class);
+
+    // Appointment Page di Backsite
+    Route::resource('appointment', AppointmentBacksiteController::class);
+
+    // Type User Page di Backsite
+    Route::resource('type-user', TypeUserController::class);
+
+    // Doctor Page di Backsite
+    Route::resource('doctor', DoctorController::class);
 
 });
 
