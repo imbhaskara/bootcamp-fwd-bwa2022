@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Backsite;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AppointmentBacksiteController extends Controller
+class TransactionController extends Controller
 {
     //Construct digunakan untuk mengamankan aplikasi kita dari edit-edit yang tidak diharapkan
     public function __construct()
@@ -19,7 +19,7 @@ class AppointmentBacksiteController extends Controller
      */
     public function index()
     {
-        return view('pages.backsite.operational.appointment.index');
+        return view('pages.backsite.operational.transaction.index');
     }
 
     /**
