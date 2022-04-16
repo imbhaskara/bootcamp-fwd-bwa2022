@@ -3,10 +3,30 @@
 namespace App\Http\Controllers\Backsite;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
+//Input library
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
+
+// Input request
+use App\Http\Requests\Specialist\StoreDoctorRequest;
+use App\Http\Requests\Specialist\UpdateDoctorRequest;
+
+//Input library use yang singkat
+//use Gate;
+use Auth;
+
+//Input our model here
+use App\Models\MasterData\Specialist;
+use App\Models\Operational\Doctor;
 
 class DoctorController extends Controller
 {
+    //Construct digunakan untuk mengamankan aplikasi kita dari edit-edit yang tidak diharapkan
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,6 +34,12 @@ class DoctorController extends Controller
      */
     public function index()
     {
+        // for table  grid view
+        $doctors = Doctor::orderBy('created_at', 'desc')->get();
+
+        // for select2 from specialist -> a-z nama biar mudah pencarian
+        $specialists = Specialist::orderBy('name', 'asc')->get();
+
         return view('pages.backsite.operational.doctor.index');
     }
 
@@ -24,7 +50,7 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        //
+        return abort('404');
     }
 
     /**
@@ -33,9 +59,16 @@ class DoctorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreDoctorRequest $request)
     {
-        //
+        // Kita gunakan data untuk menampung semua request (get all request from frontsite)
+        $data = $request->all();
+
+        // Lalu datanya di store ke database
+        $doctor = Doctor::create($data);
+
+        alert()->success('Berhasil', 'Data Dokter berhasil disimpan!');
+        return redirect()->route('backsite.doctor.index');
     }
 
     /**
@@ -44,9 +77,9 @@ class DoctorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Doctor $doctor)
     {
-        //
+        return view('pages.backsite.operational.doctor.show', compact('doctor'));
     }
 
     /**
@@ -55,9 +88,12 @@ class DoctorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Doctor $doctor)
     {
-        //
+        // for select2 from specialist -> a-z nama biar mudah pencarian
+        $specialists = Specialist::orderBy('name', 'asc')->get();
+
+        return view('pages.backsite.operational.doctor.edit', compact('doctor', 'specialists'));
     }
 
     /**
@@ -67,9 +103,16 @@ class DoctorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateDoctorRequest $request, Doctor $doctor)
     {
-        //
+        // Kita gunakan data untuk menampung semua request (get all request from frontsite)
+        $data = $request->all();
+
+        // Lalu datanya di store ke database
+        $doctor->update($data);
+
+        alert()->success('Berhasil', 'Data Dokter berhasil diupdate!');
+        return redirect()->route('backsite.doctor.index');
     }
 
     /**
@@ -78,8 +121,11 @@ class DoctorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Doctor $doctor)
     {
-        //
+        $doctor->forceDelete($doctor);
+
+        alert()->success('Berhasil', 'Data Dokter berhasil dihapus!');
+        return redirect()->route('backsite.doctor.index');
     }
 }

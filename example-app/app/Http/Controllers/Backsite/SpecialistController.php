@@ -61,6 +61,7 @@ class SpecialistController extends Controller
 
         // Lalu datanya di store ke database
         $specialist = Specialist::create($data);
+
         alert()->success('Berhasil', 'Data Spesialis berhasil disimpan!');
         return redirect()->route('backsite.specialist.index');
     }
@@ -84,7 +85,7 @@ class SpecialistController extends Controller
      */
     public function edit(Specialist $specialist)
     {
-        return view('pages.backsite.master-data.specialist.show', compact('specialist'));
+        return view('pages.backsite.master-data.specialist.edit', compact('specialist'));
     }
 
     /**
@@ -113,7 +114,8 @@ class SpecialistController extends Controller
      */
     public function destroy(Specialist $specialist)
     {
-        $specialist->delete();
+        $specialist->forceDelete($specialist);
+
         alert()->success('Berhasil', 'Data Spesialis berhasil dihapus!');
         return back();
     }
