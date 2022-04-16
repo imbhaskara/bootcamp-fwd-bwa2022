@@ -3,7 +3,17 @@
 namespace App\Http\Controllers\Backsite;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
+//Input library used for landing page
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
+
+//Input library use yang singkat
+//use Gate;
+use Auth;
+
+//Input our model here
+use App\Models\MasterData\TypeUser;
 
 class TypeUserController extends Controller
 {
@@ -19,7 +29,9 @@ class TypeUserController extends Controller
      */
     public function index()
     {
-        return view('pages.backsite.management-access.type-user.index');
+        $type_user = TypeUser::all();
+        dd($type_user);
+        return view('pages.backsite.management-access.type-user.index', compact('type_user'));
     }
 
     /**

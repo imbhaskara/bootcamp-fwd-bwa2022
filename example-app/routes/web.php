@@ -60,7 +60,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('appointment', AppointmentBacksiteController::class);
 
     // Type User Page di Backsite
-    Route::resource('type-user', TypeUserController::class);
+    Route::resource('type_user', TypeUserController::class);
 
     // Doctor Page di Backsite
     Route::resource('doctor', DoctorController::class);
@@ -75,7 +75,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('consultation', ConsultationController::class);
 
     //Config Payment Page di Backsite
-    Route::resource('config-payment', ConfigPaymentController::class);
+    Route::resource('config_payment', ConfigPaymentController::class);
 
     // Specialist Page di Backsite
     Route::resource('specialist', SpecialistController::class);

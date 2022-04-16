@@ -3,7 +3,21 @@
 namespace App\Http\Controllers\Backsite;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
+//Input library
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
+
+// Input request
+use App\Http\Requests\Specialist\StoreSpecialistRequest;
+use App\Http\Requests\Specialist\UpdateSpecialistRequest;
+
+//Input library use yang singkat
+//use Gate;
+use Auth;
+
+//Input our model here
+use App\Models\MasterData\Specialist;
 
 class SpecialistController extends Controller
 {
@@ -19,7 +33,9 @@ class SpecialistController extends Controller
      */
     public function index()
     {
-        return view('pages.backsite.master-data.specialist.index');
+        $specialist = Specialist::orderBy('created_at', 'desc')->get();
+        
+        return view('pages.backsite.master-data.specialist.index', compact('specialist'));
     }
 
     /**
@@ -29,7 +45,7 @@ class SpecialistController extends Controller
      */
     public function create()
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -38,9 +54,15 @@ class SpecialistController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreSpecialistRequest $request)
     {
-        //
+        // Kita gunakan data untuk menampung semua request (get all request from frontsite)
+        $data = $request->all();
+
+        // Lalu datanya di store ke database
+        $specialist = Specialist::create($data);
+        alert()->success('Berhasil', 'Data Spesialis berhasil disimpan!');
+        return redirect()->route('backsite.specialist.index');
     }
 
     /**
@@ -49,9 +71,9 @@ class SpecialistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Specialist $specialist)
     {
-        //
+        return view('pages.backsite.master-data.specialist.show', compact('specialist'));
     }
 
     /**
@@ -60,9 +82,9 @@ class SpecialistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Specialist $specialist)
     {
-        //
+        return view('pages.backsite.master-data.specialist.show', compact('specialist'));
     }
 
     /**
@@ -72,9 +94,15 @@ class SpecialistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateSpecialistRequest $request, Specialist $specialist)
     {
-        //
+        // Kita gunakan data untuk menampung semua request (get all request from frontsite)
+        $data = $request->all();
+
+        // Lalu datanya di update ke database
+        $specialist->update($data);
+        alert()->success('Berhasil', 'Data Spesialis berhasil diupdate!');
+        return redirect()->route('backsite.specialist.index');
     }
 
     /**
@@ -83,8 +111,10 @@ class SpecialistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Specialist $specialist)
     {
-        //
+        $specialist->delete();
+        alert()->success('Berhasil', 'Data Spesialis berhasil dihapus!');
+        return back();
     }
 }
