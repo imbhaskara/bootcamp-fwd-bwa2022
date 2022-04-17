@@ -3,7 +3,22 @@
 namespace App\Http\Controllers\Backsite;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
+//Input library
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
+
+// Input request
+
+//Input library use yang singkat
+//use Gate;
+use Auth;
+
+//Input our model here
+use App\Models\Operational\Appointment;
+use App\Models\Operational\Doctor;
+use App\Models\User;
+use App\Models\MasterData\Consultation;
 
 class AppointmentBacksiteController extends Controller
 {
@@ -19,6 +34,17 @@ class AppointmentBacksiteController extends Controller
      */
     public function index()
     {
+        // for table  grid view
+        $appointment = Appointment::orderBy('created_at', 'desc')->get();
+
+        // for select2 from doctor -> a-z nama biar mudah pencarian
+        $doctors = Doctor::orderBy('name', 'asc')->get();
+
+        // for select2 from user -> a-z nama biar mudah pencarian
+        $users = User::orderBy('name', 'asc')->get();
+
+        // for select2 from consultation -> a-z nama biar mudah pencarian
+        $consultations = Consultation::orderBy('name', 'asc')->get();
         return view('pages.backsite.operational.appointment.index');
     }
 
@@ -29,7 +55,7 @@ class AppointmentBacksiteController extends Controller
      */
     public function create()
     {
-        //
+        return abort('404');
     }
 
     /**
@@ -40,7 +66,7 @@ class AppointmentBacksiteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return abort('404');
     }
 
     /**
@@ -49,9 +75,9 @@ class AppointmentBacksiteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Appointment $appointment)
     {
-        //
+        return abort('404');
     }
 
     /**
@@ -62,7 +88,7 @@ class AppointmentBacksiteController extends Controller
      */
     public function edit($id)
     {
-        //
+        return abort('404');
     }
 
     /**
@@ -74,7 +100,7 @@ class AppointmentBacksiteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return abort('404');
     }
 
     /**
@@ -83,8 +109,12 @@ class AppointmentBacksiteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Appointment $appointment)
     {
-        //
+        $appointment->forceDelete($appointment);
+
+        // Tambahkan alert success delete data
+        alert()->success('Berhasil', 'Data Appointment berhasil dihapus!');
+        return redirect()->route('backsite.appointment.index');
     }
 }

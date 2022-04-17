@@ -3,7 +3,20 @@
 namespace App\Http\Controllers\Backsite;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
+//Input library
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
+
+// Input request
+
+//Input library use yang singkat
+//use Gate;
+use Auth;
+
+//Input our model here
+use App\Models\Operational\Appointment;
+use App\Models\Operational\Transaction;
 
 class TransactionController extends Controller
 {
@@ -19,6 +32,12 @@ class TransactionController extends Controller
      */
     public function index()
     {
+        // for table  grid view
+        $transactions = Transaction::orderBy('created_at', 'desc')->get();
+
+        // for select2 from appointment -> tanggal terkini ke tanggal terlama
+        $appointments = Appointment::orderBy('created_at', 'desc')->get();
+
         return view('pages.backsite.operational.transaction.index');
     }
 
@@ -29,7 +48,7 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -40,7 +59,7 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -51,7 +70,7 @@ class TransactionController extends Controller
      */
     public function show($id)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -62,7 +81,7 @@ class TransactionController extends Controller
      */
     public function edit($id)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -74,7 +93,7 @@ class TransactionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -83,8 +102,12 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Transaction $transaction)
     {
-        //
+        $transaction->forceDelete($transaction);
+
+        // Tambahkan alert sukses delete data
+        alert()->success('Berhasil', 'Data Transaction berhasil dihapus');
+        return redirect()->route('backsite.transaction.index');
     }
 }

@@ -3,7 +3,21 @@
 namespace App\Http\Controllers\Backsite;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
+//Input library
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
+
+// Input request
+use App\Http\Requests\Specialist\StoreDoctorRequest;
+use App\Http\Requests\Specialist\UpdateDoctorRequest;
+
+//Input library use yang singkat
+//use Gate;
+use Auth;
+
+//Input our model here
+use App\Models\MasterData\ManagementAccess\Permission;
 
 class PermissionController extends Controller
 {
@@ -19,6 +33,9 @@ class PermissionController extends Controller
      */
     public function index()
     {
+        // for table  grid view
+        $permission = Permission::all();
+
         return view('pages.backsite.management-access.permission.index');
     }
 
@@ -29,7 +46,7 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -40,7 +57,7 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -51,7 +68,7 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -62,7 +79,7 @@ class PermissionController extends Controller
      */
     public function edit($id)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -74,7 +91,7 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -85,6 +102,6 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return abort(404);
     }
 }

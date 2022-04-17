@@ -3,7 +3,21 @@
 namespace App\Http\Controllers\Backsite;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
+//Input library
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
+
+// Input request
+use App\Http\Requests\Specialist\StoreConsultationRequest;
+use App\Http\Requests\Specialist\UpdateConsultationRequest;
+
+//Input library use yang singkat
+//use Gate;
+use Auth;
+
+//Input our model here
+use App\Models\MasterData\Consultation;
 
 class ConsultationController extends Controller
 {
@@ -19,6 +33,9 @@ class ConsultationController extends Controller
      */
     public function index()
     {
+        // for table  grid view
+        $consultation = Consultation::orderBy('created_at', 'desc')->get();
+
         return view('pages.backsite.master-data.consultation.index');
     }
 
@@ -29,7 +46,7 @@ class ConsultationController extends Controller
      */
     public function create()
     {
-        //
+        return abort('404');
     }
 
     /**
@@ -38,9 +55,17 @@ class ConsultationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreConsultationRequest $request)
     {
-        //
+        // Kita gunakan data untuk menampung semua request (get all request from frontsite)
+        $data = $request->all();
+
+        // Lalu datanya di store ke database
+        $consultation = Consultation::create($data);
+        
+        //Tampilkan alert sukses menambahkan data
+        alert()->success('Success', 'Data Consultation berhasil ditambahkan!');
+        return redirect()->route('backsite.consultation.index');
     }
 
     /**
@@ -49,9 +74,9 @@ class ConsultationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Consultation $consultation)
     {
-        //
+        return view('pages.backsite.master-data.consultation.show', compact('consultation'));
     }
 
     /**
@@ -60,9 +85,9 @@ class ConsultationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Consultation $consultation)
     {
-        //
+        return view('pages.backsite.master-data.consultation.edit', compact('consultation'));
     }
 
     /**
@@ -72,9 +97,17 @@ class ConsultationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateConsultationRequest $request, Consultation $consultation)
     {
-        //
+        // Kita gunakan data untuk menampung semua request (get all request from frontsite)
+        $data = $request->all();
+
+        // Lalu datanya di store ke database
+        $consultation->update($data);
+        
+        //Tampilkan alert sukses update data
+        alert()->success('Success', 'Data Consultation berhasil diupdate!');
+        return redirect()->route('backsite.consultation.index');
     }
 
     /**
@@ -83,8 +116,12 @@ class ConsultationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Consultation $consultation)
     {
-        //
+        $consultation->forceDelete();
+
+        // Tambahkan notifikasi berhasil dihapus
+        alert()->success('Success', 'Data Consultation berhasil dihapus!');
+        return redirect()->route('backsite.consultation.index');
     }
 }

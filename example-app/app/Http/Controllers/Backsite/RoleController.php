@@ -3,7 +3,21 @@
 namespace App\Http\Controllers\Backsite;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
+//Input library
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
+
+// Input request
+use App\Http\Requests\Specialist\StoreRoleRequest;
+use App\Http\Requests\Specialist\UpdateRoleRequest;
+
+//Input library use yang singkat
+//use Gate;
+use Auth;
+
+//Input our model here
+use App\Models\ManagementAccess\Role;
 
 class RoleController extends Controller
 {
@@ -19,6 +33,9 @@ class RoleController extends Controller
      */
     public function index()
     {
+        // for table  grid view
+        $role = Role::orderBy('created_at', 'desc')->get();
+
         return view('pages.backsite.management-access.role.index');
     }
 
@@ -29,7 +46,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -38,9 +55,17 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRoleRequest $request)
     {
-        //
+        // Kita gunakan data untuk menampung semua request (get all request from frontsite)
+        $data = $request->all();
+
+        // Lalu datanya di store ke database
+        $role = Role::create($data);
+
+        // Bikin Alert Sukses disimpan
+        alert()->success('Berhasil', 'Data Role berhasil disimpan!');
+        return redirect()->route('backsite.role.index');
     }
 
     /**
@@ -49,9 +74,9 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Role $role)
     {
-        //
+        return view('pages.backsite.management-access.role.show', compact('role'));
     }
 
     /**
@@ -60,9 +85,9 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Role $role)
     {
-        //
+        return view('pages.backsite.management-access.role.edit', compact('role'));
     }
 
     /**
@@ -72,9 +97,17 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRoleRequest $request, Role $role)
     {
-        //
+        // Kita gunakan data untuk menampung semua request (get all request from frontsite)
+        $data = $request->all();
+
+        // Lalu datanya di store ke database
+        $role->update($data);
+
+        // Tambahkan alert sukses update data
+        alert()->success('Berhasil', 'Data Role berhasil diupdate!');
+        return redirect()->route('backsite.role.index');
     }
 
     /**
@@ -83,8 +116,11 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        //
+        $role->forceDelete($role);
+        // Bikin alert sukses delete data
+        alert()->success('Berhasil', 'Data Role berhasil dihapus!');
+        return redirect()->route('backsite.role.index');
     }
 }

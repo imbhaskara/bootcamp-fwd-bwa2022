@@ -3,7 +3,20 @@
 namespace App\Http\Controllers\Backsite;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
+//Input library
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
+
+// Input request
+use App\Http\Requests\Specialist\UpdateConfigPaymentRequest;
+
+//Input library use yang singkat
+//use Gate;
+use Auth;
+
+//Input our model here
+use App\Models\MasterData\ConfigPayment;
 
 class ConfigPaymentController extends Controller
 {
@@ -19,6 +32,9 @@ class ConfigPaymentController extends Controller
      */
     public function index()
     {
+        // Fir table grid view
+        $configPayment = ConfigPayment::all();
+
         return view('pages.backsite.master-data.config-payment.index');
     }
 
@@ -29,7 +45,7 @@ class ConfigPaymentController extends Controller
      */
     public function create()
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -40,7 +56,7 @@ class ConfigPaymentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         return abort(404);
     }
 
     /**
@@ -49,9 +65,9 @@ class ConfigPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(ConfigPayment $config_payment)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -60,9 +76,9 @@ class ConfigPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(ConfigPayment $configPayment)
     {
-        //
+        return view('pages.backsite.master-data.config-payment.edit', compact('configPayment'));
     }
 
     /**
@@ -72,9 +88,12 @@ class ConfigPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, ConfigPayment $configPayment)
     {
-        //
+        $configPayment->update($request->all());
+
+        alert()->success('Berhasil', 'Data Config Payment berhasil diupdate!');
+        return redirect()->route('backsite.config_payment.index');
     }
 
     /**
@@ -83,8 +102,11 @@ class ConfigPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(ConfigPayment $configPayment)
     {
-        //
+        $configPayment->delete();
+
+        alert()->success('Berhasil', 'Data Config Payment berhasil dihapus!');
+        return redirect()->route('backsite.config_payment.index');
     }
 }
