@@ -16,8 +16,8 @@ use Auth;
 
 //Input our model here
 use App\Models\Operational\Appointment;
-use App\Models\Operational\Doctor;
 use App\Models\User;
+use App\Models\Operational\Doctor;
 use App\Models\MasterData\Consultation;
 
 class AppointmentBacksiteController extends Controller
@@ -37,15 +37,13 @@ class AppointmentBacksiteController extends Controller
         // for table  grid view
         $appointment = Appointment::orderBy('created_at', 'desc')->get();
 
-        // for select2 from doctor -> a-z nama biar mudah pencarian
-        $doctors = Doctor::orderBy('name', 'asc')->get();
+        // $doctor = Doctor::orderBy('name', 'asc')->get();
 
-        // for select2 from user -> a-z nama biar mudah pencarian
-        $users = User::orderBy('name', 'asc')->get();
+        $consultation = Consultation::orderBy('name', 'asc')->get();
 
-        // for select2 from consultation -> a-z nama biar mudah pencarian
-        $consultations = Consultation::orderBy('name', 'asc')->get();
-        return view('pages.backsite.operational.appointment.index');
+        $user = User::orderBy('name', 'asc')->get();
+
+        return view('pages.backsite.operational.appointment.index', compact('appointment'));
     }
 
     /**
@@ -111,6 +109,7 @@ class AppointmentBacksiteController extends Controller
      */
     public function destroy(Appointment $appointment)
     {
+        abort_if(Gate::denies('appointment_backsite_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $appointment->forceDelete($appointment);
 
         // Tambahkan alert success delete data

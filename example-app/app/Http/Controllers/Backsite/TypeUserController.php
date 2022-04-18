@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 //Input library use yang singkat
-//use Gate;
+use Gate;
 use Auth;
 
 //Input our model here
@@ -30,7 +30,7 @@ class TypeUserController extends Controller
     public function index()
     {
         $type_user = TypeUser::all();
-        dd($type_user);
+        
         return view('pages.backsite.management-access.type-user.index', compact('type_user'));
     }
 
@@ -41,7 +41,7 @@ class TypeUserController extends Controller
      */
     public function create()
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -52,7 +52,7 @@ class TypeUserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -63,7 +63,7 @@ class TypeUserController extends Controller
      */
     public function show($id)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -74,7 +74,7 @@ class TypeUserController extends Controller
      */
     public function edit($id)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -86,7 +86,7 @@ class TypeUserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -97,6 +97,7 @@ class TypeUserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        abort_if(Gate::denies('type_user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        return abort(404);
     }
 }

@@ -13,7 +13,7 @@ use App\Http\Requests\Specialist\StoreDoctorRequest;
 use App\Http\Requests\Specialist\UpdateDoctorRequest;
 
 //Input library use yang singkat
-//use Gate;
+use Gate;
 use Auth;
 
 //Input our model here
@@ -35,12 +35,12 @@ class DoctorController extends Controller
     public function index()
     {
         // for table  grid view
-        $doctors = Doctor::orderBy('created_at', 'desc')->get();
+        $doctor = Doctor::orderBy('created_at', 'desc')->get();
 
         // for select2 from specialist -> a-z nama biar mudah pencarian
-        $specialists = Specialist::orderBy('name', 'asc')->get();
+        $specialist = Specialist::orderBy('name', 'asc')->get();
 
-        return view('pages.backsite.operational.doctor.index');
+        return view('pages.backsite.operational.doctor.index', compact('doctor', 'specialist'));
     }
 
     /**
@@ -79,6 +79,7 @@ class DoctorController extends Controller
      */
     public function show(Doctor $doctor)
     {
+        abort_if(Gate::denies('doctor_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         return view('pages.backsite.operational.doctor.show', compact('doctor'));
     }
 
@@ -90,10 +91,11 @@ class DoctorController extends Controller
      */
     public function edit(Doctor $doctor)
     {
+        abort_if(Gate::denies('doctor_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         // for select2 from specialist -> a-z nama biar mudah pencarian
-        $specialists = Specialist::orderBy('name', 'asc')->get();
+        $specialist = Specialist::orderBy('name', 'asc')->get();
 
-        return view('pages.backsite.operational.doctor.edit', compact('doctor', 'specialists'));
+        return view('pages.backsite.operational.doctor.edit', compact('doctor', 'specialist'));
     }
 
     /**
@@ -123,6 +125,7 @@ class DoctorController extends Controller
      */
     public function destroy(Doctor $doctor)
     {
+        abort_if(Gate::denies('doctor_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $doctor->forceDelete($doctor);
 
         alert()->success('Berhasil', 'Data Dokter berhasil dihapus!');

@@ -9,22 +9,27 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 // Input request
-use App\Http\Requests\Specialist\UpdateConfigPaymentRequest;
 
 //Input library use yang singkat
-use Gate;
+//use Gate;
 use Auth;
 
 //Input our model here
+use App\Models\User;
+use App\Models\MasterData\Specialist;
 use App\Models\MasterData\ConfigPayment;
+use App\Models\MasterData\Consultation;
+use App\Models\Operational\Appointment;
+use App\Models\Operational\Doctor;
+use Apps\Models\Operational\Transaction;
 
-class ConfigPaymentController extends Controller
+class HospitalPatientController extends Controller
 {
-    //Construct digunakan untuk mengamankan aplikasi kita dari edit-edit yang tidak diharapkan
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+     //Construct digunakan untuk mengamankan aplikasi kita dari edit-edit yang tidak diharapkan
+     public function __construct()
+     {
+         $this->middleware('auth');
+     }
     /**
      * Display a listing of the resource.
      *
@@ -32,10 +37,12 @@ class ConfigPaymentController extends Controller
      */
     public function index()
     {
-        // Fir table grid view
-        $configPayment = ConfigPayment::all();
+        // for table grid pasien rumah sakit berdasarkan data user dan tipe usernya
+        $hospital_patient = User::whereHas('detail_user', function (Builder $query) {
+            $query->where('type_user_id', 3); // Only load data dengan tipe user id = 3
+        })->orderBy('created_at', 'desc')->get();
 
-        return view('pages.backsite.master-data.config-payment.index');
+        return view('pages.backsite.operational.hospital_patient.index', compact('hospital_patient'));
     }
 
     /**
@@ -56,7 +63,7 @@ class ConfigPaymentController extends Controller
      */
     public function store(Request $request)
     {
-         return abort(404);
+        return abort(404);
     }
 
     /**
@@ -65,7 +72,7 @@ class ConfigPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(ConfigPayment $config_payment)
+    public function show($id)
     {
         return abort(404);
     }
@@ -76,10 +83,9 @@ class ConfigPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(ConfigPayment $configPayment)
+    public function edit($id)
     {
-        abort_if(Gate::denies('config_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        return view('pages.backsite.master-data.config-payment.edit', compact('configPayment'));
+        return abort(404);
     }
 
     /**
@@ -89,13 +95,9 @@ class ConfigPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ConfigPayment $configPayment)
+    public function update(Request $request, $id)
     {
-        $data = $request->all();
-        $configPayment->update($data);
-
-        alert()->success('Berhasil', 'Data Config Payment berhasil diupdate!');
-        return redirect()->route('backsite.config_payment.index');
+        return abort(404);
     }
 
     /**
@@ -104,11 +106,8 @@ class ConfigPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ConfigPayment $configPayment)
+    public function destroy($id)
     {
-        $configPayment->delete();
-
-        alert()->success('Berhasil', 'Data Config Payment berhasil dihapus!');
-        return redirect()->route('backsite.config_payment.index');
+        return abort(404);
     }
 }

@@ -18,6 +18,9 @@ use Auth;
 
 //Input our model here
 use App\Models\ManagementAccess\Role;
+use App\Models\ManagementAccess\RoleUser;
+use App\Models\ManagementAccess\Permission;
+use App\Models\ManagementAccess\PermissionRole;
 
 class RoleController extends Controller
 {
@@ -76,6 +79,8 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        $role->load('permission');
+
         return view('pages.backsite.management-access.role.show', compact('role'));
     }
 
@@ -87,6 +92,8 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        $permission = Permission::all();
+        $role->load('permission');
         return view('pages.backsite.management-access.role.edit', compact('role'));
     }
 
@@ -104,6 +111,7 @@ class RoleController extends Controller
 
         // Lalu datanya di store ke database
         $role->update($data);
+        $role->permission()->sync($request->input('permission',[]));
 
         // Tambahkan alert sukses update data
         alert()->success('Berhasil', 'Data Role berhasil diupdate!');
@@ -118,7 +126,7 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        $role->forceDelete($role);
+        $role->forceDelete();
         // Bikin alert sukses delete data
         alert()->success('Berhasil', 'Data Role berhasil dihapus!');
         return redirect()->route('backsite.role.index');

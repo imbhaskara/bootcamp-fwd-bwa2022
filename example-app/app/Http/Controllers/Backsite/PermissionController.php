@@ -17,7 +17,10 @@ use App\Http\Requests\Specialist\UpdateDoctorRequest;
 use Auth;
 
 //Input our model here
-use App\Models\MasterData\ManagementAccess\Permission;
+use App\Models\ManagementAccess\Permission;
+use App\Models\ManagementAccess\PermissionRole;
+use App\Models\ManagementAccess\Role;
+use App\Models\ManagementAccess\RoleUser;
 
 class PermissionController extends Controller
 {

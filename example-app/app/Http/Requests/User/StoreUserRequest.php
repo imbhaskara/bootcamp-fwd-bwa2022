@@ -4,7 +4,7 @@ namespace App\Http\Requests\User;
 
 //Import model for Request methods --> This case: User Model
 use App\Model\User;
-//use Gate;
+use Gate;
 //Insert library from laravel to do requestform --> Wajib ada
 use Illuminate\Foundation\Http\FormRequest;
 //Insert libarary Symfony to get response
@@ -20,6 +20,7 @@ class StoreUserRequest extends FormRequest
     public function authorize()
     {
         //Create middleware from kernel at here
+        abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         return true;
     }
 

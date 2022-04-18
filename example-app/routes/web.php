@@ -20,6 +20,7 @@ use App\Http\Controllers\Backsite\ReportController;
 use App\Http\Controllers\Backsite\SpecialistController;
 use App\Http\Controllers\Backsite\ConsultationController;
 use App\Http\Controllers\Backsite\ConfigPaymentController;
+use App\Http\Controllers\Backsite\HospitalPatientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,6 +80,9 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
 
     // Specialist Page di Backsite
     Route::resource('specialist', SpecialistController::class);
+
+    // Hospital Patient Page di Backsite
+    Route::resource('hospital_patient', HospitalPatientController::class);
 
 });
 

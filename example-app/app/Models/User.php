@@ -68,6 +68,12 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    //Relationship table user(Ngirim) - table role(Nerima) = Many to Many
+    public function role()
+    {
+        return $this->belongsToMany('App\Models\ManagementAccess\Role');
+    }
+
     //Relationship table user(Ngirim) - table appointment(Nerima) = One to Many
     public function appointment()
         {

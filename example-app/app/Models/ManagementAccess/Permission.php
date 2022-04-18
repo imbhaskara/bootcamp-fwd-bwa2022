@@ -26,6 +26,11 @@ class Permission extends Model
          'updated_at',
          'deleted_at',
      ];
+     //Relationship table permission(Ngirim) - table Role (Nerima) = Many to Many
+     public function Role()
+     {
+         return $this->belongsToMany('App\Models\ManagementAccess\Role');
+     }
 
      //Relationship table permission(Ngirim) - table permission role(Nerima) = One to Many
     public function permission_role()
