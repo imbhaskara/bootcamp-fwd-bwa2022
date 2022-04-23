@@ -29,6 +29,9 @@ class TypeUserController extends Controller
      */
     public function index()
     {
+        // pasang gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('type_user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $type_user = TypeUser::all();
         
         return view('pages.backsite.management-access.type-user.index', compact('type_user'));
@@ -97,7 +100,6 @@ class TypeUserController extends Controller
      */
     public function destroy($id)
     {
-        abort_if(Gate::denies('type_user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         return abort(404);
     }
 }

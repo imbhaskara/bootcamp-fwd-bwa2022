@@ -13,7 +13,7 @@ use App\Http\Requests\Specialist\StoreSpecialistRequest;
 use App\Http\Requests\Specialist\UpdateSpecialistRequest;
 
 //Input library use yang singkat
-//use Gate;
+use Gate;
 use Auth;
 
 //Input our model here
@@ -33,6 +33,9 @@ class SpecialistController extends Controller
      */
     public function index()
     {
+        // Pasang gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('specialist_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $specialist = Specialist::orderBy('created_at', 'desc')->get();
         
         return view('pages.backsite.master-data.specialist.index', compact('specialist'));
@@ -59,6 +62,10 @@ class SpecialistController extends Controller
         // Kita gunakan data untuk menampung semua request (get all request from frontsite)
         $data = $request->all();
 
+        // re format before push to table
+        $data['price'] = str_replace(',', '', $data['price']);
+        $data['price'] = str_replace('IDR ', '', $data['price']);
+
         // Lalu datanya di store ke database
         $specialist = Specialist::create($data);
 
@@ -74,6 +81,8 @@ class SpecialistController extends Controller
      */
     public function show(Specialist $specialist)
     {
+        // Pasang Gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('specialist_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         return view('pages.backsite.master-data.specialist.show', compact('specialist'));
     }
 
@@ -85,6 +94,9 @@ class SpecialistController extends Controller
      */
     public function edit(Specialist $specialist)
     {
+        // Pasang Gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('specialist_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         return view('pages.backsite.master-data.specialist.edit', compact('specialist'));
     }
 
@@ -100,6 +112,9 @@ class SpecialistController extends Controller
         // Kita gunakan data untuk menampung semua request (get all request from frontsite)
         $data = $request->all();
 
+        $data['price'] = str_replace(',', '', $data['price']);
+        $data['price'] = str_replace('IDR ', '', $data['price']);
+
         // Lalu datanya di update ke database
         $specialist->update($data);
         alert()->success('Berhasil', 'Data Spesialis berhasil diupdate!');
@@ -114,6 +129,8 @@ class SpecialistController extends Controller
      */
     public function destroy(Specialist $specialist)
     {
+        // Pasang Gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('specialist_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $specialist->forceDelete($specialist);
 
         alert()->success('Berhasil', 'Data Spesialis berhasil dihapus!');

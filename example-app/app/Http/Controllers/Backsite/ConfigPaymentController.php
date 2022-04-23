@@ -32,10 +32,12 @@ class ConfigPaymentController extends Controller
      */
     public function index()
     {
+        // Pasang Gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('config_payment_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         // Fir table grid view
-        $configPayment = ConfigPayment::all();
+        $config_payment = ConfigPayment::all();
 
-        return view('pages.backsite.master-data.config-payment.index');
+        return view('pages.backsite.master-data.config-payment.index', compact('config_payment'));
     }
 
     /**
@@ -65,7 +67,7 @@ class ConfigPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(ConfigPayment $config_payment)
+    public function show($id)
     {
         return abort(404);
     }
@@ -76,10 +78,11 @@ class ConfigPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(ConfigPayment $configPayment)
+    public function edit(ConfigPayment $config_payment)
     {
-        abort_if(Gate::denies('config_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        return view('pages.backsite.master-data.config-payment.edit', compact('configPayment'));
+        // pasang gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('config__payment_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        return view('pages.backsite.master-data.config-payment.edit', compact('config_payment'));
     }
 
     /**
@@ -89,10 +92,18 @@ class ConfigPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ConfigPayment $configPayment)
+    public function update(UpdateConfigPaymentRequest $request, ConfigPayment $config_payment)
     {
+        // Get all request data from fromsite
         $data = $request->all();
-        $configPayment->update($data);
+
+        // Re Format before push to tables
+        $data['fee'] = str_replace(',', '', $data['fee']);
+        $data['fee'] = str_replace('IDR ', '', $data['fee']);
+        $data['vat'] = str_replace(',', '', $data['vat']);
+
+        // Update data to database
+        $config_payment->update($data);
 
         alert()->success('Berhasil', 'Data Config Payment berhasil diupdate!');
         return redirect()->route('backsite.config_payment.index');
@@ -104,9 +115,11 @@ class ConfigPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ConfigPayment $configPayment)
+    public function destroy(ConfigPayment $config_payment)
     {
-        $configPayment->delete();
+        // pasang gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('config__payment_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $config_payment->forceDelete();
 
         alert()->success('Berhasil', 'Data Config Payment berhasil dihapus!');
         return redirect()->route('backsite.config_payment.index');

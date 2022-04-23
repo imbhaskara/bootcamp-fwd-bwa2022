@@ -13,7 +13,7 @@ use App\Http\Requests\Specialist\StoreConsultationRequest;
 use App\Http\Requests\Specialist\UpdateConsultationRequest;
 
 //Input library use yang singkat
-//use Gate;
+use Gate;
 use Auth;
 
 //Input our model here
@@ -33,10 +33,12 @@ class ConsultationController extends Controller
      */
     public function index()
     {
+        // Pasang Gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('consultation_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         // for table  grid view
         $consultation = Consultation::orderBy('created_at', 'desc')->get();
 
-        return view('pages.backsite.master-data.consultation.index');
+        return view('pages.backsite.master-data.consultation.index', compact('consultation'));
     }
 
     /**
@@ -76,6 +78,9 @@ class ConsultationController extends Controller
      */
     public function show(Consultation $consultation)
     {
+        // Pasang Gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('consultation_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         return view('pages.backsite.master-data.consultation.show', compact('consultation'));
     }
 
@@ -87,6 +92,9 @@ class ConsultationController extends Controller
      */
     public function edit(Consultation $consultation)
     {
+        // Pasang gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('consultation_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         return view('pages.backsite.master-data.consultation.edit', compact('consultation'));
     }
 
@@ -118,6 +126,8 @@ class ConsultationController extends Controller
      */
     public function destroy(Consultation $consultation)
     {
+        // Pasang gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('consultation_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $consultation->forceDelete();
 
         // Tambahkan notifikasi berhasil dihapus

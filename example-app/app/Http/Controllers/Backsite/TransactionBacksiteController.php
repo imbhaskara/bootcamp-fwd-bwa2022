@@ -4,23 +4,28 @@ namespace App\Http\Controllers\Backsite;
 
 use App\Http\Controllers\Controller;
 
-//Input library
+// use library here
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
-// Input request
-
-//Input library use yang singkat
-//use Gate;
+// use everything here
+use Gate;
 use Auth;
 
-//Input our model here
-use App\Models\Operational\Appointment;
+// use model here
 use App\Models\Operational\Transaction;
+use App\Models\Operational\Appointment;
+use App\Models\Operational\Doctor;
+use App\Models\User;
+use App\Models\ManagementAccess\DetailUser;
+use App\Models\MasterData\Consultation;
+use App\Models\MasterData\Specialist;
+use App\Models\MasterData\ConfigPayment;
 
-class TransactionController extends Controller
+// thirdparty package
+
+class TransactionBacksiteController extends Controller
 {
-    //Construct digunakan untuk mengamankan aplikasi kita dari edit-edit yang tidak diharapkan
     public function __construct()
     {
         $this->middleware('auth');
@@ -32,13 +37,20 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        // for table  grid view
-        $transactions = Transaction::orderBy('created_at', 'desc')->get();
+        // Pasang Gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('transaction_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        // for select2 from appointment -> tanggal terkini ke tanggal terlama
-        $appointments = Appointment::orderBy('created_at', 'desc')->get();
+        // Pasang kondisi untuk transaksi berdasarkan detail users
+        $type_user_condition = Auth::user()->detail_user->type_user_id;
+        if($type_user_condition == 1){
+            // for admin
+            $transaction = Transaction::orderBy('created_at', 'desc')->get();
+        }else{
+            // Other admin for doctor & patient (task for everyone here)
+            $transaction = Transaction::orderBy('created_at', 'desc')->get();
+        }
 
-        return view('pages.backsite.operational.transaction.index');
+        return view('pages.backsite.operational.transaction.index', compact('transaction'));
     }
 
     /**
@@ -102,12 +114,8 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transaction $transaction)
+    public function destroy($id)
     {
-        $transaction->forceDelete($transaction);
-
-        // Tambahkan alert sukses delete data
-        alert()->success('Berhasil', 'Data Transaction berhasil dihapus');
-        return redirect()->route('backsite.transaction.index');
+        return abort(404);
     }
 }

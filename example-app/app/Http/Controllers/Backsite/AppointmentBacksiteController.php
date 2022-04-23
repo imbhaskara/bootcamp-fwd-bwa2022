@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 // Input request
 
 //Input library use yang singkat
-//use Gate;
+use Gate;
 use Auth;
 
 //Input our model here
@@ -19,6 +19,7 @@ use App\Models\Operational\Appointment;
 use App\Models\User;
 use App\Models\Operational\Doctor;
 use App\Models\MasterData\Consultation;
+use App\Models\Operational\Transaction;
 
 class AppointmentBacksiteController extends Controller
 {
@@ -34,14 +35,18 @@ class AppointmentBacksiteController extends Controller
      */
     public function index()
     {
-        // for table  grid view
-        $appointment = Appointment::orderBy('created_at', 'desc')->get();
+        // pasang gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('appointment_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        // $doctor = Doctor::orderBy('name', 'asc')->get();
-
-        $consultation = Consultation::orderBy('name', 'asc')->get();
-
-        $user = User::orderBy('name', 'asc')->get();
+        // Pasang kondisi untuk masing-masing detail users
+        $type_user_condition = Auth::user()->detail_user->type_user_id;
+        if($type_user_condition == 1){
+            // for admin
+            $appointment = Appointment::orderBy('created_at', 'desc')->get();
+        }else{
+            // Other admin for doctor & patient (task for everyone here)
+            $appointment = Appointment::orderBy('created_at', 'desc')->get();
+        }
 
         return view('pages.backsite.operational.appointment.index', compact('appointment'));
     }
@@ -73,7 +78,7 @@ class AppointmentBacksiteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Appointment $appointment)
+    public function show($id)
     {
         return abort('404');
     }

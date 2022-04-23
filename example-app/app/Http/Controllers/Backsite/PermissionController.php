@@ -13,7 +13,7 @@ use App\Http\Requests\Specialist\StoreDoctorRequest;
 use App\Http\Requests\Specialist\UpdateDoctorRequest;
 
 //Input library use yang singkat
-//use Gate;
+use Gate;
 use Auth;
 
 //Input our model here
@@ -36,10 +36,12 @@ class PermissionController extends Controller
      */
     public function index()
     {
+        // pasang gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('permission_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         // for table  grid view
-        $permission = Permission::all();
+        $permission = Permission::orderBy('id', 'asc')->get();
 
-        return view('pages.backsite.management-access.permission.index');
+        return view('pages.backsite.management-access.permission.index', compact('permission'));
     }
 
     /**

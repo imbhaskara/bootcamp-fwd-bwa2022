@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 
 //Input library
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 // Input request
 
 //Input library use yang singkat
-//use Gate;
+use Gate;
 use Auth;
 
 //Input our model here
@@ -21,7 +22,7 @@ use App\Models\MasterData\ConfigPayment;
 use App\Models\MasterData\Consultation;
 use App\Models\Operational\Appointment;
 use App\Models\Operational\Doctor;
-use Apps\Models\Operational\Transaction;
+use App\Models\Operational\Transaction;
 
 class HospitalPatientController extends Controller
 {
@@ -37,9 +38,11 @@ class HospitalPatientController extends Controller
      */
     public function index()
     {
+        // pasang gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('hospital_patient_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         // for table grid pasien rumah sakit berdasarkan data user dan tipe usernya
-        $hospital_patient = User::whereHas('detail_user', function (Builder $query) {
-            $query->where('type_user_id', 3); // Only load data dengan tipe user id = 3
+        $hospital_patient = User::whereHas('detail_user', function ($query) {
+            return $query->where('type_user_id', 3); // Only load data dengan tipe user id = 3
         })->orderBy('created_at', 'desc')->get();
 
         return view('pages.backsite.operational.hospital_patient.index', compact('hospital_patient'));

@@ -13,7 +13,7 @@ use App\Http\Requests\Specialist\StoreRoleRequest;
 use App\Http\Requests\Specialist\UpdateRoleRequest;
 
 //Input library use yang singkat
-//use Gate;
+use Gate;
 use Auth;
 
 //Input our model here
@@ -36,10 +36,13 @@ class RoleController extends Controller
      */
     public function index()
     {
+        // pasang gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('role_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         // for table  grid view
         $role = Role::orderBy('created_at', 'desc')->get();
 
-        return view('pages.backsite.management-access.role.index');
+        return view('pages.backsite.management-access.role.index', compact('role'));
     }
 
     /**
@@ -79,6 +82,9 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        // Pasang Gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('role_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $role->load('permission');
 
         return view('pages.backsite.management-access.role.show', compact('role'));
@@ -92,8 +98,12 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        // Pasang Gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('role_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $permission = Permission::all();
         $role->load('permission');
+
         return view('pages.backsite.management-access.role.edit', compact('role'));
     }
 
@@ -126,6 +136,9 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        // Pasang Gate untuk menolak akses ketika tidak punya permissions
+        abort_if(Gate::denies('role_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        
         $role->forceDelete();
         // Bikin alert sukses delete data
         alert()->success('Berhasil', 'Data Role berhasil dihapus!');
