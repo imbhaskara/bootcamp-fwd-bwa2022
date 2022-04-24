@@ -1,21 +1,3 @@
-Skip to content
-jiboncoco
-/
-bootcamp-fwd2022-laravel
-Public
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-More
-bootcamp-fwd2022-laravel/resources/views/pages/backsite/operational/doctor/index.blade.php
-@jiboncoco
-jiboncoco update
- History
- 1 contributor
-338 lines (289 sloc)  20 KB
 @extends('layouts.app')
 
 {{-- set title --}}
@@ -303,29 +285,35 @@ jiboncoco update
             $('#mymodal').on('show.bs.modal', function(e){
                 var button = $(e.relatedTarget);
                 var modal = $(this);
+
                 modal.find('.modal-body').load(button.data("remote"));
                 modal.find('.modal-title').html(button.data("title"));
             });
+
             $('.select-all').click(function () {
                 let $select2 = $(this).parent().siblings('.select2-full-bg')
                 $select2.find('option').prop('selected', 'selected')
                 $select2.trigger('change')
             })
+
             $('.deselect-all').click(function () {
                 let $select2 = $(this).parent().siblings('.select2-full-bg')
                 $select2.find('option').prop('selected', '')
                 $select2.trigger('change')
             })
         });
+
         $('.default-table').DataTable( {
             "order": [],
             "paging": true,
             "lengthMenu": [ [5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "All"] ],
             "pageLength": 10
         });
+
         $(function() {
             $(":input").inputmask();
         });
+
         // fancybox
         Fancybox.bind('[data-fancybox="gallery"]', {
             infinite: false

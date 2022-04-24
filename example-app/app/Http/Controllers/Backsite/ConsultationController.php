@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 // Input request
-use App\Http\Requests\Specialist\StoreConsultationRequest;
-use App\Http\Requests\Specialist\UpdateConsultationRequest;
+use App\Http\Requests\Consultation\StoreConsultationRequest;
+use App\Http\Requests\Consultation\UpdateConsultationRequest;
 
 //Input library use yang singkat
 use Gate;

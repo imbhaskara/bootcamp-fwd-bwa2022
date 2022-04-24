@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 // Input request
-use App\Http\Requests\Specialist\UpdateConfigPaymentRequest;
+use App\Http\Requests\ConfigPayment\UpdateConfigPaymentRequest;
 
 //Input library use yang singkat
 use Gate;
@@ -81,7 +81,7 @@ class ConfigPaymentController extends Controller
     public function edit(ConfigPayment $config_payment)
     {
         // pasang gate untuk menolak akses ketika tidak punya permissions
-        abort_if(Gate::denies('config__payment_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('config_payment_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         return view('pages.backsite.master-data.config-payment.edit', compact('config_payment'));
     }
 

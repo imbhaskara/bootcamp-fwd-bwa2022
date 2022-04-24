@@ -27,17 +27,21 @@ class Role extends Model
          'deleted_at',
      ];
 
-    //Relationship table role(Ngirim) - table role user(Nerima) = One to Many
-    public function role_user()
-    {
-        //relationship hasMany(path model, foreign key destination table)
-        return $this->hasMany('App\Models\ManagementAccess\RoleUser', 'role_id');
-    }
-
-    //Relationship table role(Ngirim) - table permission role(Nerima) = One to Many
-    public function permission_role()
-    {
-        //relationship hasMany(path model, foreign key destination table)
-        return $this->hasMany('App\Models\ManagementAccess\PermissionRole', 'role_id');
-    }
+     public function permission()
+     {
+         return $this->belongsToMany('App\Models\ManagementAccess\Permission');
+     }
+ 
+     // one to many
+     public function role_user()
+     {
+         // 2 parameter (path model, field foreign key)
+         return $this->hasMany('App\Models\ManagementAccess\RoleUser', 'role_id');
+     }
+ 
+     public function permission_role()
+     {
+         // 2 parameter (path model, field foreign key)
+         return $this->hasMany('App\Models\ManagementAccess\PermissionRole', 'role_id');
+     }
 }

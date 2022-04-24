@@ -1,21 +1,3 @@
-Skip to content
-jiboncoco
-/
-bootcamp-fwd2022-laravel
-Public
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-More
-bootcamp-fwd2022-laravel/resources/views/pages/backsite/master-data/config-payment/index.blade.php
-@jiboncoco
-jiboncoco update
- History
- 1 contributor
-137 lines (121 sloc)  7.31 KB
 @extends('layouts.app')
 
 {{-- set title --}}

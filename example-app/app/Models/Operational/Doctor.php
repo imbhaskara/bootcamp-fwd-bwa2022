@@ -12,7 +12,7 @@ class Doctor extends Model
         use softDeletes;
     
         //Declare table
-        public $table ='appointment';
+        public $table ='doctor';
     
         protected $dates = [
             'created_at',

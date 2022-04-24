@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 // Input request
-use App\Http\Requests\Specialist\StoreRoleRequest;
-use App\Http\Requests\Specialist\UpdateRoleRequest;
+use App\Http\Requests\Role\StoreRoleRequest;
+use App\Http\Requests\Role\UpdateRoleRequest;
 
 //Input library use yang singkat
 use Gate;
@@ -104,7 +104,7 @@ class RoleController extends Controller
         $permission = Permission::all();
         $role->load('permission');
 
-        return view('pages.backsite.management-access.role.edit', compact('role'));
+        return view('pages.backsite.management-access.role.edit', compact('permission', 'role'));
     }
 
     /**
@@ -139,7 +139,7 @@ class RoleController extends Controller
         // Pasang Gate untuk menolak akses ketika tidak punya permissions
         abort_if(Gate::denies('role_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         
-        $role->forceDelete();
+        $role->delete();
         // Bikin alert sukses delete data
         alert()->success('Berhasil', 'Data Role berhasil dihapus!');
         return redirect()->route('backsite.role.index');

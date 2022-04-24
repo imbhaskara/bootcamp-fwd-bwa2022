@@ -113,7 +113,7 @@ class UserController extends Controller
         $type_user = TypeUser::orderBy('name', 'asc')->get();
         $user->load('role');
 
-        return view('pages.backsite.management-access.user.edit', compact('user', 'type_user', 'roles'));
+        return view('pages.backsite.management-access.user.edit', compact('user', 'type_user', 'role'));
     }
 
     /**

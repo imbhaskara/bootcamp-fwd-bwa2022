@@ -11,8 +11,8 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 // Input request
-use App\Http\Requests\Specialist\StoreDoctorRequest;
-use App\Http\Requests\Specialist\UpdateDoctorRequest;
+use App\Http\Requests\Doctor\StoreDoctorRequest;
+use App\Http\Requests\Doctor\UpdateDoctorRequest;
 
 //Input library use yang singkat
 use Gate;
@@ -74,19 +74,19 @@ class DoctorController extends Controller
         $data['fee'] = str_replace('IDR ', '', $data['fee']);
 
           // upload process here
-          $path = public_path('app/public/assets/file-doctor');
-          if(!File::isDirectory($path)){
-              $response = Storage::makeDirectory('public/assets/file-doctor');
-          }
+        $path = public_path('app/public/assets/file-doctor');
+        if(!File::isDirectory($path)){
+            $response = Storage::makeDirectory('public/assets/file-doctor');
+        }
   
-          // change file locations
-          if(isset($data['photo'])){
-              $data['photo'] = $request->file('photo')->store(
-                  'assets/file-doctor', 'public'
-              );
-          }else{
-              $data['photo'] = "";
-          }
+        // change file locations
+        if(isset($data['photo'])){
+            $data['photo'] = $request->file('photo')->store(
+                'assets/file-doctor', 'public'
+            );
+        }else{
+            $data['photo'] = "";
+        }
   
         // Lalu datanya di store ke database
         $doctor = Doctor::create($data);
@@ -140,21 +140,27 @@ class DoctorController extends Controller
         $data['fee'] = str_replace(',', '', $data['fee']);
         $data['fee'] = str_replace('IDR ', '', $data['fee']);
 
-        // Lalu datanya di store ke database
-        $doctor->update($data);
+         // upload process here
+        // change format photo
+        if(isset($data['photo'])){
 
-         // change file locations
-         $data['photo'] = $request->file('photo')->store(
-            'assets/file-doctor', 'public'
-        );
+            // first checking old photo to delete from storage
+           $get_item = $doctor['photo'];
 
-        // delete old photo from storage
-        $data_old = 'storage/'.$get_item;
-        if (File::exists($data_old)) {
-            File::delete($data_old);
-        }else{
-            File::delete('storage/app/public/'.$get_item);
-        }
+           // change file locations
+           $data['photo'] = $request->file('photo')->store(
+               'assets/file-doctor', 'public'
+           );
+
+           // delete old photo from storage
+           $data_old = 'storage/'.$get_item;
+           if (File::exists($data_old)) {
+               File::delete($data_old);
+           }else{
+               File::delete('storage/app/public/'.$get_item);
+           }
+
+       }
 
         // Update to database
         $doctor->update($data);
