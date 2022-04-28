@@ -55,6 +55,6 @@ class Appointment extends Model
     public function transaction()
     {
         //relationship hasOne(path model, foreign key destination table)
-        return $this->hasOne('App\Models\Operational\Doctor', 'appointment_id');
+        return $this->hasOne('App\Models\Operational\Transaction', 'appointment_id');
     }
 }

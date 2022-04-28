@@ -12,15 +12,14 @@ use App\Http\Controllers\Backsite\DashboardController;
 use App\Http\Controllers\Backsite\PermissionController;
 use App\Http\Controllers\Backsite\RoleController;
 use App\Http\Controllers\Backsite\UserController;
-use App\Http\Controllers\Backsite\AppointmentBacksiteController;
 use App\Http\Controllers\Backsite\TypeUserController;
-use App\Http\Controllers\Backsite\DoctorController;
-use App\Http\Controllers\Backsite\TransactionController;
-use App\Http\Controllers\Backsite\ReportController;
 use App\Http\Controllers\Backsite\SpecialistController;
-use App\Http\Controllers\Backsite\ConsultationController;
 use App\Http\Controllers\Backsite\ConfigPaymentController;
+use App\Http\Controllers\Backsite\ConsultationController;
+use App\Http\Controllers\Backsite\DoctorController;
 use App\Http\Controllers\Backsite\HospitalPatientController;
+use App\Http\Controllers\Backsite\AppointmentBacksiteController;
+use App\Http\Controllers\Backsite\TransactionBacksiteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,10 +36,14 @@ Route::resource('/', LandingController::class);
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     // appointment page
+    Route::get('appointment/doctor/{id}', [AppointmentController::class, 'appointment'])->name('appointment.doctor'); // Mengambil data dokter sesuai pilihan untuk proses appointment dengan dokter
     Route::resource('appointment', AppointmentController::class);
 
     // payment page
+    Route::get('payment/success', [PaymentController::class, 'success'])->name('payment.success'); // Direct link controller ke payment success ketika sukses melakukan pembayaran
+    Route::get('payment/appointment/{id}', [PaymentController::class, 'payment'])->name('payment.appointment'); // Melanjutkan dari appointment ke payment dengan id dokter yang sama
     Route::resource('payment', PaymentController::class);
+    
 });
 
 Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['auth:sanctum', 'verified']], function () {
@@ -67,7 +70,7 @@ Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['aut
     Route::resource('doctor', DoctorController::class);
 
     // Transaction Page di Backsite
-    Route::resource('transaction', TransactionController::class);
+    Route::resource('transaction', TransactionBacksiteController::class);
 
     // Report Page di Backsite
     Route::resource('report', ReportController::class);

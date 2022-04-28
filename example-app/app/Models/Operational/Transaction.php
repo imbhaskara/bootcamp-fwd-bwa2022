@@ -12,7 +12,7 @@ class Transaction extends Model
      use softDeletes;
     
      //Declare table
-     public $table ='appointment';
+     public $table ='transaction';
  
      protected $dates = [
          'created_at',

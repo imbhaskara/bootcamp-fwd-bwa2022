@@ -191,7 +191,7 @@ class DoctorController extends Controller
             File::delete('storage/app/public/'.$get_item);
         }
         
-        $doctor->forceDelete($doctor);
+        $doctor->Delete();
 
         alert()->success('Berhasil', 'Data Dokter berhasil dihapus!');
         return redirect()->route('backsite.doctor.index');

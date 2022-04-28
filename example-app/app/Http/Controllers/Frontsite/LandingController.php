@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 //Input library used for landing page
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\DB;
 
 //Input library use yang singkat
 //use Gate;
@@ -28,7 +29,10 @@ class LandingController extends Controller
      */
     public function index()
     {
-        return view('pages.frontsite.landing-page.index');
+        // Panggil kebutuhan frontsite yang berasal dari Database (Kasus ini data doctor dan specialist)
+        $specialist = Specialist::orderBy('name', 'desc')->limit(5)->get();
+        $doctor = Doctor::orderBy('created_at', 'desc')->limit(4)->get();
+        return view('pages.frontsite.landing-page.index', compact('doctor', 'specialist'));
     }
 
     /**
