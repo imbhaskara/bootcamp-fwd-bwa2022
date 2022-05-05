@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontsite\LandingController;
 use App\Http\Controllers\Frontsite\AppointmentController;
 use App\Http\Controllers\Frontsite\PaymentController;
+use App\Http\Controllers\Frontsite\RegisterController;
 
 //Input your backsite controller here
 use App\Http\Controllers\Backsite\DashboardController;
@@ -43,7 +44,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('payment/success', [PaymentController::class, 'success'])->name('payment.success'); // Direct link controller ke payment success ketika sukses melakukan pembayaran
     Route::get('payment/appointment/{id}', [PaymentController::class, 'payment'])->name('payment.appointment'); // Melanjutkan dari appointment ke payment dengan id dokter yang sama
     Route::resource('payment', PaymentController::class);
-    
+     
+    // register page
+    Route::resource('register_success', RegisterController::class);
 });
 
 Route::group(['prefix' => 'backsite', 'as' => 'backsite.', 'middleware' => ['auth:sanctum', 'verified']], function () {

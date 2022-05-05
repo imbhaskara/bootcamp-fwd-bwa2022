@@ -2,7 +2,12 @@
 
 namespace App\Actions\Fortify;
 
+// Import Model yang kita gunakan
 use App\Models\User;
+use App\Models\ManagementAccess\DetailUser;
+
+// Import library package laravel yang kita gunakan
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -27,10 +32,29 @@ class CreateNewUser implements CreatesNewUsers
             // 'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
-        return User::create([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'password' => Hash::make($input['password']),
-        ]);
+        // return User::create([
+        //     'name' => $input['name'],
+        //     'email' => $input['email'],
+        //     'password' => Hash::make($input['password']),
+        // ]);
+
+        // Fungsi create usernya kita ganti dengan mengambil data dari DB
+        return DB::transaction(function () use ($input){
+            return tap(User::create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+            ]), function (User $user) {
+                // Add data to detail user
+                $detail_user = new DetailUser;
+                $detail_user->user_id = $user->id;
+                $detail_user->type_user_id = 3;
+                $detail_user->contact = NULL;
+                $detail_user->address = NULL;
+                $detail_user->photo = NULL;
+                $detail_user->gender = NULL;
+                $detail_user->save();
+            });
+        });
     }
 }
